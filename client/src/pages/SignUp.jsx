@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 
 export default function SignUp() {
@@ -80,6 +81,7 @@ export default function SignUp() {
           >
             {loading ? "Loading..." : "Sign Up"}
           </button>
+          <OAuth />
         </form>
 
         {error && <p className="text-red-500 text-center mt-3">{error}</p>}

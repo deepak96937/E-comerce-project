@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { singinStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 
 const SignIn = () => {
@@ -9,8 +10,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
- 
-  const {loading, error} = useSelector((state)=>state.user)
+
+  const { loading, error } = useSelector((state) => state.user)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ const SignIn = () => {
           >
             {loading ? "Loading..." : "Sign In"}
           </button>
+          <OAuth/>
         </form>
 
         {error && <p className="text-red-500 text-center mt-3">{error}</p>}
