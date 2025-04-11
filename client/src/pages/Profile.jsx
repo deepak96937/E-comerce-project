@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadToCloudinary } from "../utils/cloudnaryUploade";
-import { updateUserFailure, updateUserScces, updateUserStart } from "../redux/user/userSlice"
-
+import { deleteUserFailure, deleteUserStart, deleteUserSuccess, updateUserFailure, updateUserScces, updateUserStart } from "../redux/user/userSlice"
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -14,8 +13,6 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const dispatch = useDispatch();
   const [updateSuccess, setUpdateSuccess] = useState(false)
-
-
 
   const handleFileUpload = async (file) => {
     try {
@@ -57,6 +54,23 @@ const Profile = () => {
       setUpdateSuccess(true)
     } catch (error) {
       dispatch(updateUserFailure(error.message))
+    }
+  }
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE"
+      })
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message))
+        return;
+      }
+      dispatch(deleteUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
     }
   }
 
@@ -132,7 +146,7 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
 
