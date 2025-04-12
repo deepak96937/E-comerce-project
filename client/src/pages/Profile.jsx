@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadToCloudinary } from "../utils/cloudnaryUploade";
-import { deleteUserFailure, deleteUserStart, deleteUserSuccess, updateUserFailure, updateUserScces, updateUserStart } from "../redux/user/userSlice"
+import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserFailure, signOutUserStart, signOutUserSuccess, updateUserFailure, updateUserScces, updateUserStart } from "../redux/user/userSlice"
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -71,6 +71,21 @@ const Profile = () => {
       dispatch(deleteUserSuccess(data))
     } catch (error) {
       dispatch(deleteUserFailure(error.message))
+    }
+  }
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message))
+        return
+      }
+      dispatch(signOutUserSuccess(data))
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message))
     }
   }
 
@@ -147,7 +162,7 @@ const Profile = () => {
 
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
 
       <p className=" text-red-700 mt-5">{error ? error : " "}</p>
