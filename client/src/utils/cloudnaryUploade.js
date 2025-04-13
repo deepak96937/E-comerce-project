@@ -28,3 +28,21 @@ export const uploadToCloudinary = async (file, onProgress) => {
   }
 };
 
+export const storeImage = async (file) => {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "deepak"); // Replace with your preset
+    formData.append("folder", "user-listing");
+
+    fetch(`https://api.cloudinary.com/v1_1/dgy12aku9/image/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(data => resolve(data.secure_url))
+      .catch(err => reject(err));
+  });
+};
+
+
